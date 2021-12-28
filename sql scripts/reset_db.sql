@@ -83,15 +83,15 @@ DROP TABLE IF EXISTS `art_objects` ;
 CREATE TABLE IF NOT EXISTS `art_objects` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(65) NOT NULL,
-  `category` ENUM('NA', 'painting', 'sculpture', 'digital', 'literature', 'architecture', 'film', 'music') NOT NULL DEFAULT 'NA',
-  `type` ENUM('NA', 'physical', 'digital', 'NFT') NOT NULL DEFAULT 'NA',
-  `status` ENUM('NA', 'in_private', 'in_public', 'on_auction', 'on_sale') NOT NULL DEFAULT 'NA',
+  `category` ENUM('NA', 'painting', 'sculpture', 'digital', 'literature', 'architecture', 'film', 'music') NULL DEFAULT 'NA',
+  `type` ENUM('NA', 'physical', 'digital', 'NFT') NULL DEFAULT 'NA',
+  `status` ENUM('NA', 'in_private', 'in_public', 'on_auction', 'on_sale') NULL DEFAULT 'NA',
   `description` TEXT NULL DEFAULT NULL,
   `author_id` INT NULL DEFAULT NULL,
   `owner_id` INT NOT NULL,
   `artstyle_id` INT NULL DEFAULT NULL,
-  `time_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `time_modified` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `time_created` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `time_modified` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
   UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE,
   UNIQUE INDEX `title_UNIQUE` (`title` ASC) VISIBLE,
@@ -157,30 +157,40 @@ CREATE TABLE IF NOT EXISTS `maintainances` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
 
+-- -----------------------------------------------------
+-- table roles
+-- -----------------------------------------------------
+
+DROP TABLE IF EXISTS `roles`;
+
+CREATE TABLE IF NOT EXISTS `roles` (
+    `ID` INT NOT NULL AUTO_INCREMENT,
+    `name` ENUM('ROLE_USER','ROLE_MODERATOR','ROLE_ADMIN'),
+    PRIMARY KEY (`ID`),
+    UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE
+) ENGINE = InnoDB DEFAULT  CHARACTER SET = utf8mb3;
 
 -- -----------------------------------------------------
--- Table `subscribtions_id`
+-- Table `user_roles`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `subscribtions_id` ;
+DROP TABLE IF EXISTS `user_roles`;
 
-CREATE TABLE IF NOT EXISTS `subscribtions_id` (
-  `ID` INT NOT NULL AUTO_INCREMENT,
-  `user_id` INT NOT NULL,
-  `author_id` INT NOT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE,
-  INDEX `follower_id_idx` (`user_id` ASC) VISIBLE,
-  INDEX `leader_id_idx` (`author_id` ASC) VISIBLE,
-  CONSTRAINT `follower_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `users` (`ID`),
-  CONSTRAINT `leader_id`
-    FOREIGN KEY (`author_id`)
-    REFERENCES `authors` (`ID`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+CREATE TABLE IF NOT EXISTS `user_roles` (
+    `ID` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `role_id` INT NOT NULL,
+    PRIMARY KEY (`ID`),
+    UNIQUE INDEX `ID_UNIQUE` (`ID` ASC) VISIBLE,
+    INDEX `user_to_role_idx` (`user_id` ASC) VISIBLE,
+    INDEX `role_to_user_idx` (`role_id` ASC) VISIBLE,
+    CONSTRAINT `user_to_role_id`
+        FOREIGN KEY (`user_id`)
+            REFERENCES `users` (`ID`),
+    CONSTRAINT `role_to_user_id`
+        FOREIGN KEY (`role_id`)
+            REFERENCES `roles` (`ID`)
 
-USE `open_gallery` ;
+) ENGINE = InnoDB DEFAULT  CHARACTER SET = utf8mb3;
 
 -- -----------------------------------------------------
 -- procedure add_art_object
@@ -316,3 +326,11 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Role inserts
+-- -----------------------------------------------------
+
+INSERT INTO `roles`(name) VALUES('ROLE_USER');
+INSERT INTO `roles`(name) VALUES('ROLE_MODERATOR');
+INSERT INTO `roles`(name) VALUES('ROLE_ADMIN');
