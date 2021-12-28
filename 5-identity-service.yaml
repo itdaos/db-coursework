@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: identity
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 9070
+    targetPort: 9070
+  selector:
+    app: identity

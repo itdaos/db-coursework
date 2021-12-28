@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config
+spec:
+  selector:
+    matchLabels:
+      app: config
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: config
+    spec:
+      containers:
+      - image: itdaos/dvc-config:latest
+        name: config

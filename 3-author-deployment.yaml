@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: author
+spec:
+  selector:
+    matchLabels:
+      app: author
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: author
+    spec:
+      containers:
+      - image: itdaos/dvc-author:latest
+        name: author

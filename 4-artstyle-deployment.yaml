@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: artstyle
+spec:
+  selector:
+    matchLabels:
+      app: artstyle
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: artstyle
+    spec:
+      containers:
+      - image: itdaos/dvc-artstyle:latest
+        name: artstyle
