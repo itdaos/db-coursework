@@ -6,26 +6,17 @@ The project is designed to operate large amounts of standartized data that conce
 
 This repository serves as a configurational hub for kubernetes deployment. For all services, see the list below:
 
-* Identity service
+* [Identity service](https://github.com/itdaos/dvc-identity-service)
 
-* Gallery service
+* [Art service](https://github.com/itdaos/dvc-art-service)
 
-* Author service
+* [Author service](https://github.com/itdaos/dvc-author-service)
 
-* Subscribtion service
-
-* Artstyle service
-
-* Maintainance service
-
-* ...
+* [Artstyle service](https://github.com/itdaos/dvc-artstyle-service)
 
 Apart from Entity-related services, project also uses:
 
-* API Gateway service
-
-* RabbitMQ
-
-* Kafka
-
-* ...
+* [Gateway service](https://github.com/itdaos/dvc-gateway-service)
+* MySQL
+* [Discovery service](https://github.com/itdaos/dvc-discovery-service)
+* [Config service](https://github.com/itdaos/dvc-config-service)
